@@ -1,0 +1,41 @@
+sudo apt-get update  //actualizar archivos y paquetes 
+sudo nano sources.list:
+mx-> us 
+
+Obtener IP 
+
+Existencia de Pip en python
+pip --version 
+sudo apt.get install python-pip
+sudo apt install python-pip  
+uname-a // version buntu
+
+pip install simpy
+>>import simpy 
+
+terminal:
+python + enter=shell de python
+
+archivo.py
+
+import simpy
+def car(env):  //define una función y se le pasa un argumento
+    while True:    
+        print('Start parking at %d' %env.now)  enviroment-> objeto de control de eventos, procesos y tiempo. now=tomo el tiempo actual simulación
+        parking_duration=5   //Tiempo parkeado 5 unidades de tiempo del simulador
+        yield env.timeout(parking_duration)   // yield=generadores + función,proceso,variable =ejecutas comando hasta que env regrese. Yield bloquea el programa hasta que env regrese
+// al temrinar el yield :
+        print('Start driving at %d' %env.now)  
+        trip_duration=2
+        yield env.timeout(trip_duration)
+
+
+in python en la ubicación en donde se guardó el archivo:
+from cars import *
+objeto principal env:
+env =simpy.Enviroment()
+
+//genera un proceso con la función car(env) 
+env.process(car(env)) // Creación de proceso
+env.run(until=50)
+debido al while true lo hará infinitamente, con until=50 lo hace durante 50 tiempo de simulación

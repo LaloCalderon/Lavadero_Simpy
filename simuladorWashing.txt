@@ -1,0 +1,32 @@
+import simpy
+from random import randint
+//Resource -> configura cuantos servidores pueden atender = (machine)
+class Carobject):
+	def __init__(self, env, machine, my_id):
+		self.env=env
+		self.id=my_id       //Cada que llegue, Para solicitar=Request de la maquina 
+		self.server=machine //Hasta que se libere, nadie puede entrar 
+		self.waiting=0      //Cuando se libere debe mandar
+		self.env.process(self.running()) //Process de cada objeto
+	//request -> objeto compartido. regresa un id del proceso que indica si se puede usar->Libera id 
+	
+	def arrived_and_wash(self):
+		yield.self.env.timeout(2)  #Tiempo de llegada al queue 2->#randint
+		start_waiting=self.env.now  #Tiempo de la simulación para sacar tiempo de espera
+		print('%s arriving ar %d' % (self.id, self.env.now))  #A que hora llegó y qué coche llegó
+		rq=self.server.request()    #rq->Pide un turno al server (flag)
+		yield rq                    #bloquea hasta que rq sea cierto,para EL HILO, la máquina da recurso y cuando lo haga regresa
+		self.waiting=self.env.now-start_waiting
+		print('%s total waiting time %d' %d(self.id,self.env.now))
+		yield self.env.timeout(2) #Washing the car  self.env.process(wash) 	
+		self.server.relase(rq) #Libero el recurso para que pase el siguiente carro
+		print('%s leaving at %d' %(self.id,self.env.now))
+
+	def running(self):
+		#while True:
+		yield self.env.process(self.arrived_and_wash())
+
+##Terminal
+env=simpy.Enviroment()
+serv=simpy.Resource(env,capacity=1) //capacidad=2 -> puede atender a dos personas 
+car1=Car(env,serv)

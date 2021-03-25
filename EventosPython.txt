@@ -1,0 +1,45 @@
+import simpy
+from random import randint
+#schedule -> tiempo entre procesos
+
+class Car(object):  #env=lleva el control de procesos(tiempo de simulación)
+    #Cuando se crea un objeto se debe decir a que env pertenece.
+    
+    def __init__(self, env, my_id):  #Instanciar objeto=Reservar memoria (malloc) self=objetos 
+        self.env=env   #env=var miembro con contenido
+        self.action=env.process(self.running())    #registra proceso y genera objeto; run=método
+        self.ide=my_id
+    
+    def running(self):
+        while True:
+            printf('Start parking %s and charging at %d' %(self.ide,self.env.now)) #self se creo desde el objeto, se manda a llamar desde
+            charge_duration=5 #randint(1,10)
+            try:   //Si se produce la exepción, se ejecuta el bloque except
+                yield self.env.timeput(charge_duration)
+            except simpy.Interrupt: //Si hay interrupcion en drive, se imprime:
+                print('Process was interrupted. Hope, battery is charged')
+            print('Starting driving at %d'%self.env.now)
+            trip_duration=2 #randint(1,10)
+            yield self.env.timeout(trip_duration)
+    def driver(env, car):
+        yield env.timeout(3)
+        car.action.interrupt()
+
+en terminal:
+//importar simpy
+env=simpy.Enviroment()
+//objeto: se registra proceso
+car1=car(env,'car1') //car1=self.my_id
+car2=car(env,'car2')
+env.process(driver(env,car2))  //interrupción
+a=simpy.Enviroment()
+b=simpy.En
+//correr
+env.run(until=50)
+//a=simpy.Enviroment()
+//a.run()
+
+def driver(env,car):
+    yield env.timeout(3) //lo interumpe en 3; Env espera 3 tiempo de simulación   
+    car.action.interrupt() 
+//Cuando se corre el run todos lo procesos se empiezan a ejecutar  
